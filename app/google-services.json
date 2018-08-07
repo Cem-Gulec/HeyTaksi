@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "725451503647",
+    "firebase_url": "https://carsimulator-30ce5.firebaseio.com",
+    "project_id": "carsimulator-30ce5",
+    "storage_bucket": "carsimulator-30ce5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725451503647:android:8222bf45b5d630e1",
+        "android_client_info": {
+          "package_name": "com.example.cem.cardsimulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725451503647-lhfun1f3lc6e99l072a9721596k0gcnh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cem.cardsimulator",
+            "certificate_hash": "3fa54b8a75b463294b9d6f44af8fb64e29bb2253"
+          }
+        },
+        {
+          "client_id": "725451503647-b51r46tsc6stdnnhmq8j5u13u56lconc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGhbOm25vSrfQdGE18Nd7YgKrbMz9jLvo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725451503647-b51r46tsc6stdnnhmq8j5u13u56lconc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -16,10 +16,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.cem.cardsimulator.Model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnSignin,btnRegister;
+    Button btnSignin,btnRegister, btnForget;
     RelativeLayout rootLayout;
 
     FirebaseAuth auth;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         //init layout elements
         btnSignin= (Button)findViewById(R.id.btnSignin);
         btnRegister= (Button)findViewById(R.id.btnRegister);
+        btnForget = (Button) findViewById(R.id.btnForget) ;
         rootLayout= (RelativeLayout)findViewById(R.id.rootLayout);
 
         //Event
@@ -72,6 +77,30 @@ public class MainActivity extends AppCompatActivity {
                 showLoginDialog();
             }
         });
+
+        btnForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgetEvent();
+            }
+        });
+    }
+
+    private void forgetEvent(){
+
+        //Dialog buraya da gelecek
+        /*String email = resetPasswordFld.getText().toString().trim();
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ResetPassword.this, "e-mail buat reset password sudah dikirimkan",Toast.LENGTH_LONG).show();
+                            Intent loginIntent = new Intent (ResetPassword.this, LoginActivity.class);
+                            startActivity(loginIntent);
+                        }
+                    }
+                });*/
     }
 
     private void showLoginDialog(){

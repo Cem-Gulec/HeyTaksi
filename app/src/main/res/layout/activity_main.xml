@@ -9,47 +9,64 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
+        android:id="@+id/linear1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="H E Y T A K S I"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
 
-            android:textAlignment="center" />
-    </LinearLayout>
+            android:textSize="26sp" />
+    </LinearLayout>,
+
+
+    <Button
+        android:id="@+id/btnSignin"
+        android:text="Giriş Yap"
+        android:layout_alignBottom="@+id/linear2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:layout_alignLeft="@id/linear2"
+        android:layout_alignRight="@id/linear2"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_margin="16dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/linear2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <Button
-            android:id="@+id/btnSignin"
-            android:text="Sign in"
-            android:layout_marginRight="6dp"
-            android:layout_marginBottom="0dp"
+            android:id="@+id/btnForget"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btnRegister"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="3dp"
+            android:text="Şifremi Unuttum" />
 
         <Button
             android:id="@+id/btnRegister"
-            android:text="Register"
-            android:layout_marginLeft="6dp"
+            android:layout_toLeftOf="@+id/btnForget"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="Kayıt Ol" />
+
     </LinearLayout>
 
 </RelativeLayout>

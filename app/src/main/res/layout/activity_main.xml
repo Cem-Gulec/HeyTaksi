@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/btnSignin"
-        android:text="Giriş Yap"
+        android:text="SIGN IN"
         android:layout_alignBottom="@+id/linear2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
@@ -57,7 +57,7 @@
             android:layout_toLeftOf="@+id/btnRegister"
             android:layout_marginBottom="0dp"
             android:layout_marginRight="3dp"
-            android:text="Şifremi Unuttum" />
+            android:text="FORGOT PASSWORD" />
 
         <Button
             android:id="@+id/btnRegister"
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="Kayıt Ol" />
+            android:text="REGISTER" />
 
     </LinearLayout>
 

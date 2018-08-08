@@ -88,19 +88,73 @@ public class MainActivity extends AppCompatActivity {
 
     private void forgetEvent(){
 
-        //Dialog buraya da gelecek
-        /*String email = resetPasswordFld.getText().toString().trim();
-        auth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("FORGOT PASSWORD");
+            dialog.setMessage("Use your email to get validation key");
+
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View forgot_layout = inflater.inflate(R.layout.activity_forget_password,null);
+
+            final MaterialEditText edtEmail = forgot_layout.findViewById(R.id.et1);
+
+            final String email = edtEmail.getText().toString().trim();
+
+            dialog.setView(forgot_layout);
+
+            //set button
+            dialog.setPositiveButton("SEND", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+
+                    //check validation
+                    if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+
+                        Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //Logic kısmı
+                    String email = edtEmail.getText().toString().trim();
+                     auth.sendPasswordResetEmail(email)
+                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ResetPassword.this, "e-mail buat reset password sudah dikirimkan",Toast.LENGTH_LONG).show();
-                            Intent loginIntent = new Intent (ResetPassword.this, LoginActivity.class);
-                            startActivity(loginIntent);
+                            Toast.makeText(MainActivity.this, "e-mail sent",Toast.LENGTH_LONG).show();
                         }
                     }
-                });*/
+                })
+                     .addOnFailureListener(new OnFailureListener() {
+                         @Override
+                         public void onFailure(@NonNull Exception e) {
+                             Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+
+                         }
+                     });
+
+
+                }
+            });
+
+            dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+
+
+
+            dialog.show();
+
+
+
+        }
     }
 
     private void showLoginDialog(){
@@ -108,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("SIGN IN");
-            dialog.setMessage("Use your email to register");
+            dialog.setMessage("Use your email to sign in");
 
 
             LayoutInflater inflater = LayoutInflater.from(this);
@@ -152,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
 
-                                            startActivity(new Intent(MainActivity.this,Main2Activity.class));
+                                            startActivity(new Intent(MainActivity.this,MapsActivity.class));
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {

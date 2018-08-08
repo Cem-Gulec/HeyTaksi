@@ -1,5 +1,6 @@
 package com.example.cem.cardsimulator;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -29,6 +30,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private final static int REQUEST_lOCATION=90;
+
+    @Override
+    public void onBackPressed() {
+
+        Intent i = new Intent(MapsActivity.this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +96,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //mMap.addMarker(new MarkerOptions().position(latLng).title("Burası "+location));
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 }
+            }
+        });
+
+        Button btn_relog = (Button)findViewById(R.id.btn_relog);
+
+        btn_relog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(i);
+
             }
         });
     }

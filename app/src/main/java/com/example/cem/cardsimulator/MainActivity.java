@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.taishi.flipprogressdialog.FlipProgressDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         backPressedEvent();
-
 
     }
 
@@ -94,36 +98,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void progressDevent(){
-
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setTitle("Progress");
-        progressDialog.setIcon(R.mipmap.ic_launcher);
-        progressDialog.setMessage("Waiting ...");
-        progressDialog.setMax(100);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                try{
-                    while(progressDialog.getProgress()<= progressDialog.getMax()){
-                        Thread.sleep(200);
-                        progressDialog.incrementProgressBy(10);
-                        if(progressDialog.getProgress() == progressDialog.getMax())
-                            progressDialog.dismiss();
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        progressDialog.show();
-    }
-
     private void backPressedEvent(){
 
         {
@@ -146,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent i = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(i);
+
                 }
             });
 
@@ -160,13 +135,13 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
+
+
             dialog.show();
 
 
 
-
         }
-
     }
 
     private void forgetEvent(){
@@ -289,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
 
-                                    //progressDevent();
+                                    progressDevent();
                                     startActivity(new Intent(MainActivity.this,MapsActivity.class));
                                     finish();
                                 }
@@ -317,6 +292,36 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void progressDevent(){
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle("Progress");
+        progressDialog.setIcon(R.mipmap.ic_launcher);
+        progressDialog.setMessage("Waiting ...");
+        progressDialog.setMax(100);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try{
+                    while(progressDialog.getProgress()<= progressDialog.getMax()){
+                        Thread.sleep(1500);
+                        progressDialog.incrementProgressBy(20);
+                        if(progressDialog.getProgress() == progressDialog.getMax())
+                            progressDialog.dismiss();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        progressDialog.show();
     }
 
     private void showRegisterDialog(){

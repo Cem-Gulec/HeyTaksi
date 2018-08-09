@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,9 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
 
-        Intent i = new Intent(MapsActivity.this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        backPressedEvent();
 
     }
 
@@ -141,5 +141,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void backPressedEvent(){
+
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Are you sure ?");
+
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View exit_layout = inflater.inflate(R.layout.layout_exit,null);
+
+            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
+            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
+
+            dialog.setView(exit_layout);
+
+            //set button
+            btn_hayir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(MapsActivity.this, MapsActivity.class);
+                    startActivity(i);
+
+                }
+            });
+
+            btn_evet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(0);
+                }
+            });
+
+
+
+
+            dialog.show();
+
+
+
+        }
     }
 }

@@ -69,10 +69,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 if(mMap.getMapType()==GoogleMap.MAP_TYPE_NORMAL){
                     mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                    btn_MapType.setText("NORMAL");
                 }else{
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                    btn_MapType.setText("UYDU");
                 }
             }
         });

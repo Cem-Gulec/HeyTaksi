@@ -16,15 +16,16 @@
 
         <Button
             android:id="@+id/btn_hayir"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="HAYIR" />
+            android:text="NO" />
 
         <Button
             android:id="@+id/btn_evet"
-            android:layout_width="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="EVET" />
+            android:text="YES" />
 
 
 

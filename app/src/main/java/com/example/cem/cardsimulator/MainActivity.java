@@ -1,6 +1,7 @@
 package com.example.cem.cardsimulator;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -41,35 +42,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("Are you sure ?");
+        backPressedEvent();
 
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View exit_layout = inflater.inflate(R.layout.layout_exit,null);
-
-            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
-            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
-
-            dialog.setView(exit_layout);
-
-            //set button
-            btn_hayir.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    
-                }
-            });
-
-
-
-
-            dialog.show();
-
-
-
-        }
 
     }
 
@@ -120,6 +94,81 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void progressDevent(){
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle("Progress");
+        progressDialog.setIcon(R.mipmap.ic_launcher);
+        progressDialog.setMessage("Waiting ...");
+        progressDialog.setMax(100);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(false);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try{
+                    while(progressDialog.getProgress()<= progressDialog.getMax()){
+                        Thread.sleep(200);
+                        progressDialog.incrementProgressBy(10);
+                        if(progressDialog.getProgress() == progressDialog.getMax())
+                            progressDialog.dismiss();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        progressDialog.show();
+    }
+
+    private void backPressedEvent(){
+
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Are you sure ?");
+
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View exit_layout = inflater.inflate(R.layout.layout_exit,null);
+
+            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
+            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
+
+            dialog.setView(exit_layout);
+
+            //set button
+            btn_hayir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(i);
+                }
+            });
+
+            btn_evet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(0);
+                }
+            });
+
+
+            dialog.show();
+
+
+
+
+        }
+
+    }
+
     private void forgetEvent(){
 
         {
@@ -153,22 +202,22 @@ public class MainActivity extends AppCompatActivity {
 
                     //Logic kısmı
                     String email = edtEmail.getText().toString().trim();
-                     auth.sendPasswordResetEmail(email)
-                         .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "e-mail sent",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                })
-                     .addOnFailureListener(new OnFailureListener() {
-                         @Override
-                         public void onFailure(@NonNull Exception e) {
-                             Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+                    auth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(MainActivity.this, "e-mail sent",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
 
-                         }
-                     });
+                                }
+                            });
 
 
                 }
@@ -209,48 +258,49 @@ public class MainActivity extends AppCompatActivity {
 
             //set button
             dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                            dialog.dismiss();
+                    dialog.dismiss();
 
-                            //check validation
-                            if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+                    //check validation
+                    if (TextUtils.isEmpty(edtEmail.getText().toString())) {
 
-                                Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT).show();
-                                return;
-                            }
+                        Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                            if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+                    if (TextUtils.isEmpty(edtPassword.getText().toString())) {
 
-                                Snackbar.make(rootLayout, "Please enter a password", Snackbar.LENGTH_SHORT).show();
-                                return;
-                            }
+                        Snackbar.make(rootLayout, "Please enter a password", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
 
-                            if ((edtPassword.getText().toString().length() < 6)) {
+                    if ((edtPassword.getText().toString().length() < 6)) {
 
-                                Snackbar.make(rootLayout, "Password is short", Snackbar.LENGTH_SHORT).show();
-                                return;
-                            }
+                        Snackbar.make(rootLayout, "Password is short", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                            //Login
-                            auth.signInWithEmailAndPassword(edtEmail.getText().toString(),edtPassword.getText().toString())
-                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                        @Override
-                                        public void onSuccess(AuthResult authResult) {
-
-                                            startActivity(new Intent(MainActivity.this,MapsActivity.class));
-                                            finish();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
+                    //Login
+                    auth.signInWithEmailAndPassword(edtEmail.getText().toString(),edtPassword.getText().toString())
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+                                public void onSuccess(AuthResult authResult) {
+
+                                    //progressDevent();
+                                    startActivity(new Intent(MainActivity.this,MapsActivity.class));
+                                    finish();
                                 }
-                            });
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
                         }
                     });
+                }
+            });
 
             dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                 @Override
@@ -266,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
+        }
     }
 
     private void showRegisterDialog(){
@@ -353,13 +403,13 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
 
-                    }
-                });
+                            }
+                        });
 
             }
         });

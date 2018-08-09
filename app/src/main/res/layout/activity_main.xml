@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/resim2"
+    android:background="@drawable/taxi_auto_city_122356_1080x1920"
     android:id="@+id/rootLayout"
     tools:context=".MainActivity">
 

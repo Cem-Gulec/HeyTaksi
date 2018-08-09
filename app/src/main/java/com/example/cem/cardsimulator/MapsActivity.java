@@ -42,6 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -116,9 +117,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng turkey = new LatLng(41, 29);
+        LatLng turkey = new LatLng(41.08181, 29.01584);
         mMap.addMarker(new MarkerOptions().position(turkey).title("Marker in Turkey"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(turkey));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(turkey, 15));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
 

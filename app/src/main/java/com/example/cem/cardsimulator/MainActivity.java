@@ -39,13 +39,21 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference users;
 
     @Override
+    public void onBackPressed() {
+
+        Intent i = new Intent(MainActivity.this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 
 
         setContentView(R.layout.activity_main);

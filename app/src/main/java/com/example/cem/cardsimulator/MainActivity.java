@@ -37,7 +37,41 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase db;
     DatabaseReference users;
-    
+
+    @Override
+    public void onBackPressed() {
+
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Are you sure ?");
+
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View exit_layout = inflater.inflate(R.layout.layout_exit,null);
+
+            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
+            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
+
+            dialog.setView(exit_layout);
+
+            //set button
+            btn_hayir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
+
+
+
+
+            dialog.show();
+
+
+
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

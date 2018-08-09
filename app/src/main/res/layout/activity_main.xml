@@ -25,7 +25,7 @@
             android:textColor="@android:color/white"
 
             android:textSize="26sp" />
-    </LinearLayout>,
+    </LinearLayout>
 
 
     <Button
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/btnRegister"
             android:layout_marginBottom="0dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="2dp"
             android:text="FORGOT PASSWORD" />
 
         <Button
@@ -64,7 +64,7 @@
             android:layout_toLeftOf="@+id/btnForget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="2dp"
             android:text="REGISTER" />
 
     </LinearLayout>

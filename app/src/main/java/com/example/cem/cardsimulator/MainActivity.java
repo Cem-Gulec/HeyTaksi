@@ -4,8 +4,12 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -30,12 +34,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.taishi.flipprogressdialog.FlipProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ProgressDialog progressDialog;
+
 
     Button btnSignin,btnRegister, btnForget;
     RelativeLayout rootLayout;
@@ -66,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
         //Initialize firebase
         auth= FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        users= db.getReference("Users");
+
+
+
 
 
         //init layout elements
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         btnRegister= (Button)findViewById(R.id.btnRegister);
         btnForget = (Button) findViewById(R.id.btnForget) ;
         rootLayout= (RelativeLayout)findViewById(R.id.rootLayout);
+
 
         //Event
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -265,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
 
                                     progressDevent();
+
                                     startActivity(new Intent(MainActivity.this,MapsActivity.class));
                                     finish();
                                 }
@@ -296,32 +306,50 @@ public class MainActivity extends AppCompatActivity {
 
     private void progressDevent(){
 
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setTitle("Progress");
-        progressDialog.setIcon(R.mipmap.ic_launcher);
-        progressDialog.setMessage("Waiting ...");
-        progressDialog.setMax(100);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(false);
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading..");
+        progressDialog.setTitle("Please Wait");
+        progressDialog.setCancelable(true);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
-        new Thread(new Runnable() {
+        /*AsyncTask<Void,Void,Void> asyn = new AsyncTask<Void, Void, Void>() {
+            private ProgressDialog dialog= new ProgressDialog(MainActivity.this);
+
             @Override
-            public void run() {
+            protected void onPreExecute() {
+                dialog.setMessage("Loading..");
+                dialog.setTitle("Please Wait");
+                dialog.setCancelable(true);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.show();
+            }
 
+            protected Void doInBackground(Void... args) {
                 try{
-                    while(progressDialog.getProgress()<= progressDialog.getMax()){
-                        Thread.sleep(1500);
-                        progressDialog.incrementProgressBy(20);
-                        if(progressDialog.getProgress() == progressDialog.getMax())
-                            progressDialog.dismiss();
-                    }
+                    Thread.sleep(3000);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+                return null;
             }
-        });
 
-        progressDialog.show();
+            protected void onPostExecute(Void result) {
+                // do UI work here
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+
+        }.execute();*/
+
+
+
+
+
+
+
+
     }
 
     private void showRegisterDialog(){
@@ -389,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                                 user.setPhone(edtPhone.getText().toString());
 
                                 //Use email to key
-                                users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                users.child(auth.getCurrentUser().getUid())
                                         .setValue(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

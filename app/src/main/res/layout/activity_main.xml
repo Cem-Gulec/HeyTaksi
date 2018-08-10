@@ -8,6 +8,7 @@
     android:id="@+id/rootLayout"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="wrap_content"

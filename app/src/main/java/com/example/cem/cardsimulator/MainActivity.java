@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //GPSAlert
+        GpsAlert();
+
         //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -110,36 +114,32 @@ public class MainActivity extends AppCompatActivity {
     private void backPressedEvent(){
 
         {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                    .setCancelable(false);
             dialog.setMessage("Are you sure ?");
 
 
             LayoutInflater inflater = LayoutInflater.from(this);
             View exit_layout = inflater.inflate(R.layout.layout_exit,null);
 
-            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
-            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
 
             dialog.setView(exit_layout);
 
             //set button
-            btn_hayir.setOnClickListener(new View.OnClickListener() {
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(i);
-
-                }
-            });
-
-            btn_evet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                public void onClick(DialogInterface dialog, int which) {
 
                     moveTaskToBack(true);
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(0);
+                }
+            });
+
+            dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
 
@@ -151,6 +151,35 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void GpsAlert(){
+
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(MainActivity.this)
+                        .setCancelable(false);
+        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+        final String message = "Enable either GPS or any other location"
+                + " service to find current location.  Click OK to go to"
+                + " location services settings to let you do so.";
+
+        builder.setMessage(message)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                MainActivity.this.startActivity(new Intent(action));
+                                d.dismiss();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(0);
+                            }
+                        });
+        builder.create().show();
     }
 
     private void forgetEvent(){

@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="grimsi">#E3D9E9</color>
+    <color name="grimsi2">#DBD2E0</color>
+    <color name="grimsi3">#D5CDDA</color>
+    <color name="grimsi4">#C8C0CD</color>
+    <color name="grimsi5">#BEB6C3</color>
 </resources>

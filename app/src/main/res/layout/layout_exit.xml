@@ -7,28 +7,5 @@
     app:cardElevation="10dp"
     >
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_hayir"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="NO" />
-
-        <Button
-            android:id="@+id/btn_evet"
-            android:layout_marginLeft="3dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="YES" />
-
-
-
-    </LinearLayout>
 
 </android.support.v7.widget.CardView>

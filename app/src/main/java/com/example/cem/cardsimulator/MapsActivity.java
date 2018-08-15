@@ -1,6 +1,7 @@
 package com.example.cem.cardsimulator;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -10,16 +11,19 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -38,8 +42,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     View mapView;
 
+
     private GoogleMap mMap;
     private final static int REQUEST_lOCATION=90;
+
+    private TextView mTextMessage;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_account:
+                    return true;
+
+                case R.id.navigation_search:
+                    return true;
+
+                case R.id.navigation_surucuara:
+                    return true;
+
+                case R.id.navigation_calculator:
+                    return true;
+
+                case R.id.navigation_info:
+                    return true;
+
+            }
+            return false;
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -54,7 +87,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        //Bottom navigation
+        mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_surucuara);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //Defining map elements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -112,6 +151,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         // Add a marker in Sydney and move the camera
         LatLng turkey = new LatLng(41.08181, 29.01584);
         mMap.addMarker(new MarkerOptions().position(turkey).title("Marker in Turkey"));
@@ -144,36 +184,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void backPressedEvent(){
 
         {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                    .setCancelable(false);
+            AlertDialog OptionDialog = dialog.create();
             dialog.setMessage("Are you sure ?");
 
 
             LayoutInflater inflater = LayoutInflater.from(this);
             View exit_layout = inflater.inflate(R.layout.layout_exit,null);
 
-            final Button btn_hayir = exit_layout.findViewById(R.id.btn_hayir);
-            final Button btn_evet = exit_layout.findViewById(R.id.btn_evet);
-
             dialog.setView(exit_layout);
 
             //set button
-            btn_hayir.setOnClickListener(new View.OnClickListener() {
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(MapsActivity.this, MapsActivity.class);
-                    startActivity(i);
-
-                }
-            });
-
-            btn_evet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                public void onClick(DialogInterface dialog, int which) {
 
                     moveTaskToBack(true);
                     android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(0);
+                }
+            });
+
+            dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
 

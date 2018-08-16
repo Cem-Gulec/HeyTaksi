@@ -2,12 +2,14 @@ package com.example.cem.cardsimulator;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -23,7 +25,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cem.cardsimulator.Model.User;
@@ -44,23 +48,30 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    MaterialEditText edtEmail;
+    MaterialEditText edtEmail,edtEmailSign;
     MaterialEditText edtName ;
-    MaterialEditText edtPassword ;
+    MaterialEditText edtPassword,edtPasswordSign ;
     MaterialEditText edtPhone;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences,sharedPreferencesSign;
+    SharedPreferences.Editor editor,editorSign;
     String email_data,password_data,name_data,phone_data;
+    String email_dataSign,password_dataSign;
     int sayac=0;
+    boolean registerClicked=false, signinCheck=false;
     private String EMAIL_KEY="com.example.cem.cardsimulator.EMAIL";
     private String PASSWORD_KEY="com.example.cem.cardsimulator.PASSWORD";
     private String NAME_KEY="com.example.cem.cardsimulator.NAME";
     private String PHONE_KEY="com.example.cem.cardsimulator.PHONE";
     private String MAIN_KEY="com.example.cem.cardsimulator.MAIN_DATA";
 
+    private String EMAIL_KEYSIGN="com.example.cem.cardsimulator.EMAILSIGN";
+    private String PASSWORD_KEYSIGN="com.example.cem.cardsimulator.PASSWORDSIGN";
+    private String MAIN_KEYSIGN="com.example.cem.cardsimulator.MAIN_DATASIGN";
+
     Button btnSignin,btnRegister, btnForget;
     RelativeLayout rootLayout;
+    CheckBox checkBox;
 
     FirebaseAuth auth;
     FirebaseDatabase db;
@@ -103,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         //init sharedPreferences
         sharedPreferences = getSharedPreferences(MAIN_KEY,MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        sharedPreferencesSign = getSharedPreferences(MAIN_KEYSIGN,MODE_PRIVATE);
+        editorSign = sharedPreferencesSign.edit();
 
 
         //Call for the button events
@@ -170,33 +183,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void GpsAlert(){
+    private void GpsAlert() {
 
-        final AlertDialog.Builder builder =
-                new AlertDialog.Builder(MainActivity.this)
-                        .setCancelable(false);
-        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        final String message = "Enable either GPS or any other location"
-                + " service to find current location.  Click OK to go to"
-                + " location services settings to let you do so.";
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        builder.setMessage(message)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                MainActivity.this.startActivity(new Intent(action));
-                                d.dismiss();
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                moveTaskToBack(true);
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(0);
-                            }
-                        });
-        builder.create().show();
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+            final AlertDialog.Builder builder =
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setCancelable(false);
+            final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+            final String message = "Enable either GPS or any other location"
+                    + " service to find current location.  Click OK to go to"
+                    + " location services settings to let you do so.";
+
+            builder.setMessage(message)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface d, int id) {
+                                    MainActivity.this.startActivity(new Intent(action));
+                                    d.dismiss();
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface d, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(0);
+                                }
+                            });
+            builder.create().show();
+        }
     }
 
     private void forgetEvent(){
@@ -277,44 +295,58 @@ public class MainActivity extends AppCompatActivity {
             dialog.setTitle("SIGN IN");
             dialog.setMessage("Use your email to sign in");
 
-
             LayoutInflater inflater = LayoutInflater.from(this);
             View login_layout = inflater.inflate(R.layout.layout_login,null);
 
-            final MaterialEditText edtEmail = login_layout.findViewById(R.id.edtEmail);
-            final MaterialEditText edtPassword = login_layout.findViewById(R.id.edtPassword);
+            email_dataSign = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(EMAIL_KEYSIGN, "");
+            password_dataSign = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(PASSWORD_KEYSIGN,"");
+
+            edtEmailSign = login_layout.findViewById(R.id.edtEmail);
+            edtPasswordSign = login_layout.findViewById(R.id.edtPassword);
+            checkBox= (CheckBox) findViewById(R.id.checkbox1);
+            TextView textView = (TextView)findViewById(R.id.txtL) ;
+
+                edtEmailSign.setText(email_dataSign);
+                edtPasswordSign.setText(password_dataSign);
 
             dialog.setView(login_layout);
 
             //set button
-            dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                     dialog.dismiss();
 
+                    /*if(checkBox.isChecked()){
+
+                        editorSign.putString(EMAIL_KEYSIGN, edtEmailSign.getText().toString());
+                        editorSign.putString(PASSWORD_KEYSIGN, edtPasswordSign.getText().toString());
+                        editorSign.commit();
+                    }*/
+
                     //check validation
-                    if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+                    if (TextUtils.isEmpty(edtEmailSign.getText().toString())) {
 
                         Snackbar.make(rootLayout, "Please enter email address", Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
-                    if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+                    if (TextUtils.isEmpty(edtPasswordSign.getText().toString())) {
 
                         Snackbar.make(rootLayout, "Please enter a password", Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
 
-                    if ((edtPassword.getText().toString().length() < 6)) {
+                    if ((edtPasswordSign.getText().toString().length() < 6)) {
 
                         Snackbar.make(rootLayout, "Password is short", Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
                     //Login
-                    auth.signInWithEmailAndPassword(edtEmail.getText().toString(),edtPassword.getText().toString())
+                    auth.signInWithEmailAndPassword(edtEmailSign.getText().toString(),edtPasswordSign.getText().toString())
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
@@ -336,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     dialog.dismiss();
                 }
             });
@@ -361,7 +394,6 @@ public class MainActivity extends AppCompatActivity {
 
         /*AsyncTask<Void,Void,Void> asyn = new AsyncTask<Void, Void, Void>() {
             private ProgressDialog dialog= new ProgressDialog(MainActivity.this);
-
             @Override
             protected void onPreExecute() {
                 dialog.setMessage("Loading..");
@@ -370,7 +402,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 dialog.show();
             }
-
             protected Void doInBackground(Void... args) {
                 try{
                     Thread.sleep(3000);
@@ -379,14 +410,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return null;
             }
-
             protected void onPostExecute(Void result) {
                 // do UI work here
                 if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
             }
-
         }.execute();*/
 
 
@@ -403,7 +432,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.setTitle("REGISTER");
         dialog.setMessage("Use your email to register");
 
-
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_layout = inflater.inflate(R.layout.layout_register,null);
 
@@ -417,14 +445,28 @@ public class MainActivity extends AppCompatActivity {
         edtPassword = register_layout.findViewById(R.id.edtPassword);
         edtPhone = register_layout.findViewById(R.id.edtPhone);
 
-        if(sayac!=0){
+
+        if(sayac>0 && !registerClicked){
             edtEmail.setText(email_data);
             edtName.setText(name_data);
-            edtPassword.setText(password_data);
+             edtPassword.setText(password_data);
             edtPhone.setText(phone_data);
         }
 
         dialog.setView(register_layout);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                editor.putString(EMAIL_KEY, edtEmail.getText().toString());
+                editor.putString(PASSWORD_KEY, edtPassword.getText().toString());
+                editor.putString(NAME_KEY, edtName.getText().toString());
+                editor.putString(PHONE_KEY, edtPhone.getText().toString());
+                editor.commit();
+                sayac++;
+            }
+        });
 
         //set button
         dialog.setPositiveButton("REGISTER", new DialogInterface.OnClickListener() {
@@ -464,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(AuthResult authResult) {
 
+                                registerClicked=true;
                                 //Save user to db
                                 User user = new User();
 
@@ -507,14 +550,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                editor.putString(EMAIL_KEY, edtEmail.getText().toString());
-                editor.putString(PASSWORD_KEY, edtPassword.getText().toString());
-                editor.putString(NAME_KEY, edtName.getText().toString());
-                editor.putString(PHONE_KEY, edtPhone.getText().toString());
-                editor.commit();
-                sayac++;
-
                 dialog.dismiss();
+
+
             }
         });
 

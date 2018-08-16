@@ -29,44 +29,43 @@
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btnSignin"
-        android:text="SIGN IN"
-        android:layout_alignBottom="@+id/linear2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:layout_alignLeft="@id/linear2"
-        android:layout_alignRight="@id/linear2"
-        android:gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/linear2"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="2">
 
         <Button
-            android:id="@+id/btnForget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btnRegister"
-            android:layout_marginBottom="0dp"
-            android:layout_marginRight="2dp"
-            android:text="FORGOT PASSWORD" />
+            android:id="@+id/btnSignin"
+            android:text="SIGN IN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_toLeftOf="@+id/btnForget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="REGISTER" />
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="horizontal">
+
+             <Button
+                 android:id="@+id/btnForget"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:text="FORGOT PASSWORD"
+                 android:layout_weight="1" />
+
+             <Button
+                 android:id="@+id/btnRegister"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:text="REGISTER"
+                 android:layout_weight="1"/>
+         </LinearLayout>
 
     </LinearLayout>
 

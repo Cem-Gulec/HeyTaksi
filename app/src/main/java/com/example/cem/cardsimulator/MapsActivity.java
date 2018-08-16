@@ -99,50 +99,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-
+        //Initialize buttons
         final Button btn_MapType=(Button) findViewById(R.id.btn_Sat);
+        Button btnGo=(Button) findViewById(R.id.btn_Go);
+        Button btn_relog = (Button)findViewById(R.id.btn_relog);
+
+        //Button events
         btn_MapType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mMap.getMapType()==GoogleMap.MAP_TYPE_NORMAL){
-                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                }else{
-                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                }
+                changeMapType();
             }
         });
-
-        Button btnGo=(Button) findViewById(R.id.btn_Go);
 
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText etLocation=(EditText)findViewById(R.id.et_location);
-                String location=etLocation.getText().toString();
-                if(location!=null && !location.equals("")){
-                    List<Address> adressList=null;
-                    Geocoder geocoder=new Geocoder(MapsActivity.this);
-                    try {
-                        adressList=geocoder.getFromLocationName(location,1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address=adressList.get(0);
-                    LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
-                    //mMap.addMarker(new MarkerOptions().position(latLng).title("Burası "+location));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                }
+                goToLocation();
             }
         });
-
-        Button btn_relog = (Button)findViewById(R.id.btn_relog);
 
         btn_relog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MapsActivity.this, MainActivity.class);
-                startActivity(i);
-
+                relogEvent();
             }
         });
     }
@@ -169,6 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         if (requestCode==REQUEST_lOCATION){
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
@@ -179,6 +160,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void relogEvent(){
+
+        Intent i = new Intent(MapsActivity.this, MainActivity.class);
+        startActivity(i);
+    }
+
+    private void goToLocation(){
+
+        EditText etLocation=(EditText)findViewById(R.id.et_location);
+        String location=etLocation.getText().toString();
+        if(location!=null && !location.equals("")){
+            List<Address> adressList=null;
+            Geocoder geocoder=new Geocoder(MapsActivity.this);
+            try {
+                adressList=geocoder.getFromLocationName(location,1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address=adressList.get(0);
+            LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
+            //mMap.addMarker(new MarkerOptions().position(latLng).title("Burası "+location));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
+    }
+
+    private void changeMapType(){
+
+        if(mMap.getMapType()==GoogleMap.MAP_TYPE_NORMAL){
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }else{
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
     private void backPressedEvent(){

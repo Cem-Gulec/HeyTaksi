@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -43,6 +44,20 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
+    MaterialEditText edtEmail;
+    MaterialEditText edtName ;
+    MaterialEditText edtPassword ;
+    MaterialEditText edtPhone;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    String email_data,password_data,name_data,phone_data;
+    int sayac=0;
+    private String EMAIL_KEY="com.example.cem.cardsimulator.EMAIL";
+    private String PASSWORD_KEY="com.example.cem.cardsimulator.PASSWORD";
+    private String NAME_KEY="com.example.cem.cardsimulator.NAME";
+    private String PHONE_KEY="com.example.cem.cardsimulator.PHONE";
+    private String MAIN_KEY="com.example.cem.cardsimulator.MAIN_DATA";
 
     Button btnSignin,btnRegister, btnForget;
     RelativeLayout rootLayout;
@@ -69,14 +84,12 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
         setContentView(R.layout.activity_main);
-
 
         //Initialize firebase
         auth= FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-
+        users = db.getReference("Users");
 
 
 
@@ -87,8 +100,12 @@ public class MainActivity extends AppCompatActivity {
         btnForget = (Button) findViewById(R.id.btnForget) ;
         rootLayout= (RelativeLayout)findViewById(R.id.rootLayout);
 
+        //init sharedPreferences
+        sharedPreferences = getSharedPreferences(MAIN_KEY,MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
-        //Event
+
+        //Call for the button events
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -390,10 +407,22 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_layout = inflater.inflate(R.layout.layout_register,null);
 
-        final MaterialEditText edtEmail = register_layout.findViewById(R.id.edtEmail);
-        final MaterialEditText edtName = register_layout.findViewById(R.id.edtName);
-        final MaterialEditText edtPassword = register_layout.findViewById(R.id.edtPassword);
-        final MaterialEditText edtPhone = register_layout.findViewById(R.id.edtPhone);
+        email_data = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(EMAIL_KEY, "");
+        password_data = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(PASSWORD_KEY,"");
+        name_data = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(NAME_KEY,"");
+        phone_data = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(PHONE_KEY,"");
+
+        edtEmail = register_layout.findViewById(R.id.edtEmail);
+        edtName = register_layout.findViewById(R.id.edtName);
+        edtPassword = register_layout.findViewById(R.id.edtPassword);
+        edtPhone = register_layout.findViewById(R.id.edtPhone);
+
+        if(sayac!=0){
+            edtEmail.setText(email_data);
+            edtName.setText(name_data);
+            edtPassword.setText(password_data);
+            edtPhone.setText(phone_data);
+        }
 
         dialog.setView(register_layout);
 
@@ -430,14 +459,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //Register new user
-
                 auth.createUserWithEmailAndPassword(edtEmail.getText().toString(),edtPassword.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
 
                                 //Save user to db
-
                                 User user = new User();
 
                                 user.setEmail(edtEmail.getText().toString());
@@ -446,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                                 user.setPhone(edtPhone.getText().toString());
 
                                 //Use email to key
-                                users.child(auth.getCurrentUser().getUid())
+                                users.child(FirebaseAuth.getInstance().getUid())
                                         .setValue(user)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -479,6 +506,14 @@ public class MainActivity extends AppCompatActivity {
         dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                editor.putString(EMAIL_KEY, edtEmail.getText().toString());
+                editor.putString(PASSWORD_KEY, edtPassword.getText().toString());
+                editor.putString(NAME_KEY, edtName.getText().toString());
+                editor.putString(PHONE_KEY, edtPhone.getText().toString());
+                editor.commit();
+                sayac++;
+
                 dialog.dismiss();
             }
         });

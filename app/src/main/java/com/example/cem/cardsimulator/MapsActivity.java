@@ -48,31 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private TextView mTextMessage;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_account:
-                    return true;
-
-                case R.id.navigation_search:
-                    return true;
-
-                case R.id.navigation_surucuara:
-                    return true;
-
-                case R.id.navigation_calculator:
-                    return true;
-
-                case R.id.navigation_info:
-                    return true;
-
-            }
-            return false;
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -162,6 +138,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_account:
+                    Intent i = new Intent(MapsActivity.this, Bottom_Account_Activity.class);
+                    startActivity(i);
+                    return true;
+
+                case R.id.navigation_search:
+                    return true;
+
+                case R.id.navigation_surucuara:
+                    return true;
+
+                case R.id.navigation_calculator:
+                    return true;
+
+                case R.id.navigation_info:
+                    return true;
+
+            }
+            return false;
+        }
+    };
+
     private void relogEvent(){
 
         Intent i = new Intent(MapsActivity.this, MainActivity.class);
@@ -201,7 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                     .setCancelable(false);
-            AlertDialog OptionDialog = dialog.create();
             dialog.setMessage("Are you sure ?");
 
 

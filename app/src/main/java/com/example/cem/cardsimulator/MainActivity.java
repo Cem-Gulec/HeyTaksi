@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -19,6 +23,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     String email_data,password_data,name_data,phone_data;
     String email_dataSign,password_dataSign;
     int sayac=0;
-    boolean registerClicked=false, signinCheck=false;
+    boolean registerClicked=false, checkboxClickCheck=false, textClickCheck=false;
     private String EMAIL_KEY="com.example.cem.cardsimulator.EMAIL";
     private String PASSWORD_KEY="com.example.cem.cardsimulator.PASSWORD";
     private String NAME_KEY="com.example.cem.cardsimulator.NAME";
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSignin,btnRegister, btnForget;
     RelativeLayout rootLayout;
     CheckBox checkBox;
+    TextView tv;
 
     FirebaseAuth auth;
     FirebaseDatabase db;
@@ -89,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //GPSAlert
-        GpsAlert();
+        while(GpsAlert());
 
         //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -183,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void GpsAlert() {
+    private boolean GpsAlert() {
 
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -196,13 +204,25 @@ public class MainActivity extends AppCompatActivity {
             final String message = "Enable either GPS or any other location"
                     + " service to find current location.  Click OK to go to"
                     + " location services settings to let you do so.";
+            final String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
 
             builder.setMessage(message)
                     .setPositiveButton("OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface d, int id) {
-                                    MainActivity.this.startActivity(new Intent(action));
-                                    d.dismiss();
+                                   // MainActivity.this.startActivity(new Intent(action));
+                                   // d.dismiss();
+
+                                    if(!provider.contains("gps")){ //if gps is disabled
+                                        final Intent poke = new Intent();
+                                        poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+                                        poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+                                        poke.setData(Uri.parse("3"));
+                                        sendBroadcast(poke);
+                                    }
+
+
                                 }
                             })
                     .setNegativeButton("Cancel",
@@ -215,6 +235,12 @@ public class MainActivity extends AppCompatActivity {
                             });
             builder.create().show();
         }
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return false;
+        }
+        else
+            return true;
     }
 
     private void forgetEvent(){
@@ -298,13 +324,14 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(this);
             View login_layout = inflater.inflate(R.layout.layout_login,null);
 
-            email_dataSign = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(EMAIL_KEYSIGN, "");
-            password_dataSign = getSharedPreferences(MAIN_KEY, MODE_PRIVATE).getString(PASSWORD_KEYSIGN,"");
+            email_dataSign = getSharedPreferences(MAIN_KEYSIGN, MODE_PRIVATE).getString(EMAIL_KEYSIGN, "");
+            password_dataSign = getSharedPreferences(MAIN_KEYSIGN, MODE_PRIVATE).getString(PASSWORD_KEYSIGN,"");
 
             edtEmailSign = login_layout.findViewById(R.id.edtEmail);
             edtPasswordSign = login_layout.findViewById(R.id.edtPassword);
-            checkBox= (CheckBox) findViewById(R.id.checkbox1);
-            TextView textView = (TextView)findViewById(R.id.txtL) ;
+            checkBox= login_layout.findViewById(R.id.checkbox1);
+            tv= login_layout.findViewById(R.id.txtL);
+
 
                 edtEmailSign.setText(email_dataSign);
                 edtPasswordSign.setText(password_dataSign);
@@ -312,18 +339,11 @@ public class MainActivity extends AppCompatActivity {
             dialog.setView(login_layout);
 
             //set button
-                dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+            dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                     dialog.dismiss();
-
-                    /*if(checkBox.isChecked()){
-
-                        editorSign.putString(EMAIL_KEYSIGN, edtEmailSign.getText().toString());
-                        editorSign.putString(PASSWORD_KEYSIGN, edtPasswordSign.getText().toString());
-                        editorSign.commit();
-                    }*/
 
                     //check validation
                     if (TextUtils.isEmpty(edtEmailSign.getText().toString())) {
@@ -351,6 +371,12 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
 
+                                    if(checkboxClickCheck){
+
+                                        editorSign.putString(EMAIL_KEYSIGN, edtEmailSign.getText().toString());
+                                        editorSign.putString(PASSWORD_KEYSIGN, edtPasswordSign.getText().toString());
+                                        editorSign.commit();
+                                    }
                                     progressDevent();
 
                                     startActivity(new Intent(MainActivity.this,MapsActivity.class));
@@ -381,6 +407,31 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    public void textClick(View v){
+
+        if(textClickCheck){
+            checkBox.setChecked(false);
+            textClickCheck=false;
+
+        }
+        else
+        {
+            checkBox.setChecked(true);
+            textClickCheck=true;
+        }
+
+
+    }
+
+    public void checkboxClick(View v){
+
+        if(checkboxClickCheck)
+            checkboxClickCheck=false;
+
+        else
+            checkboxClickCheck=true;
     }
 
     private void progressDevent(){

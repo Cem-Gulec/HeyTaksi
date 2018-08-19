@@ -40,13 +40,16 @@
 
             <CheckBox
                 android:id="@+id/checkbox1"
+                android:checked="false"
+                android:onClick="checkboxClick"
+                android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/txtL"
-                android:onClick="RemEvent"
                 android:clickable="true"
+                android:onClick="textClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Remember Me"/>

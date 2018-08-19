@@ -47,6 +47,7 @@
             android:id="@+id/edtPhone"
             android:hint="Phone number"
             android:inputType="phone"
+            android:digits="+1234567890"
             android:text=""
             android:layout_width="200dp"
             android:layout_height="wrap_content"

@@ -43,7 +43,9 @@
         <Button
             android:id="@+id/btnSignin"
             android:text="SIGN IN"
+            android:background="#A1D5CDDA"
             android:layout_width="match_parent"
+            android:layout_margin="3dp"
             android:layout_height="wrap_content" />
 
 
@@ -53,14 +55,18 @@
              android:orientation="horizontal">
 
              <Button
+                 android:background="#A1D5CDDA"
                  android:id="@+id/btnForget"
+                 android:layout_margin="3dp"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  android:text="FORGOT PASSWORD"
                  android:layout_weight="1" />
 
              <Button
+                 android:background="#A1D5CDDA"
                  android:id="@+id/btnRegister"
+                 android:layout_margin="3dp"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  android:text="REGISTER"

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //GPSAlert
-        while(GpsAlert());
+        GpsAlert();
 
         //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean GpsAlert() {
+    private void GpsAlert() {
 
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -204,23 +204,21 @@ public class MainActivity extends AppCompatActivity {
             final String message = "Enable either GPS or any other location"
                     + " service to find current location.  Click OK to go to"
                     + " location services settings to let you do so.";
-            final String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-
 
             builder.setMessage(message)
                     .setPositiveButton("OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface d, int id) {
-                                   // MainActivity.this.startActivity(new Intent(action));
-                                   // d.dismiss();
+                                     MainActivity.this.startActivity(new Intent(action));
+                                     d.dismiss();
 
-                                    if(!provider.contains("gps")){ //if gps is disabled
+                                   /* if(!provider.contains("gps")){ //if gps is disabled
                                         final Intent poke = new Intent();
                                         poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
                                         poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
                                         poke.setData(Uri.parse("3"));
                                         sendBroadcast(poke);
-                                    }
+                                    }*/
 
 
                                 }
@@ -236,11 +234,7 @@ public class MainActivity extends AppCompatActivity {
             builder.create().show();
         }
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            return false;
-        }
-        else
-            return true;
+
     }
 
     private void forgetEvent(){
@@ -333,8 +327,8 @@ public class MainActivity extends AppCompatActivity {
             tv= login_layout.findViewById(R.id.txtL);
 
 
-                edtEmailSign.setText(email_dataSign);
-                edtPasswordSign.setText(password_dataSign);
+            edtEmailSign.setText(email_dataSign);
+            edtPasswordSign.setText(password_dataSign);
 
             dialog.setView(login_layout);
 
@@ -500,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
         if(sayac>0 && !registerClicked){
             edtEmail.setText(email_data);
             edtName.setText(name_data);
-             edtPassword.setText(password_data);
+            edtPassword.setText(password_data);
             edtPhone.setText(phone_data);
         }
 

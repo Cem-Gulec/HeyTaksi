@@ -53,6 +53,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Global variables
+    LocationManager manager;
+
     private ProgressDialog progressDialog;
 
     MaterialEditText edtEmail,edtEmailSign;
@@ -98,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         //GPSAlert
         GpsAlert();
+
+
 
         //saatin olduğu ekran şeridini kaldırmak için
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -193,10 +198,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void GpsAlert() {
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
             final AlertDialog.Builder builder =
                     new AlertDialog.Builder(MainActivity.this)
                             .setCancelable(false);
@@ -209,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface d, int id) {
-                                     MainActivity.this.startActivity(new Intent(action));
-                                     d.dismiss();
+                                    MainActivity.this.startActivity(new Intent(action));
+                                    d.dismiss();
 
                                    /* if(!provider.contains("gps")){ //if gps is disabled
                                         final Intent poke = new Intent();
@@ -233,9 +237,10 @@ public class MainActivity extends AppCompatActivity {
                             });
             builder.create().show();
         }
-
-
     }
+
+
+
 
     private void forgetEvent(){
 

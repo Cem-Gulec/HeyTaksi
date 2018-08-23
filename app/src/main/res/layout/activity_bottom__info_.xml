@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Bottom_Navigation.Bottom_Account_Activity">
 
+
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"

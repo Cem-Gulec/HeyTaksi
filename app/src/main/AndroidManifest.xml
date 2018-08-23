@@ -48,7 +48,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Bottom_Navigation.Bottom_Account_Activity" />
+        <activity android:name=".Bottom_Navigation.Bottom_Account_Activity"
+            android:theme="@style/AppTheme"/>
+
         <activity android:name=".Bottom_Navigation.Bottom_Search_Activity" />
         <activity android:name=".Bottom_Navigation.Bottom_Gettaxi_Activity" />
         <activity android:name=".Bottom_Navigation.Bottom_Calculator_Activity" />

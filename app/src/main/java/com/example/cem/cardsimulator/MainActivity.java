@@ -53,7 +53,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Global variables
     LocationManager manager;
 
     private ProgressDialog progressDialog;

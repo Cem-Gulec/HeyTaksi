@@ -49,12 +49,26 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".Bottom_Navigation.Bottom_Account_Activity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/ToolbarTheme"
+            android:label="Account"/>
 
-        <activity android:name=".Bottom_Navigation.Bottom_Search_Activity" />
-        <activity android:name=".Bottom_Navigation.Bottom_Gettaxi_Activity" />
-        <activity android:name=".Bottom_Navigation.Bottom_Calculator_Activity" />
-        <activity android:name=".Bottom_Navigation.Bottom_Info_Activity"></activity>
+        <activity android:name=".Bottom_Navigation.Bottom_Search_Activity"
+            android:theme="@style/ToolbarTheme"
+            android:label="Search"/>
+
+        <activity android:name=".Bottom_Navigation.Bottom_Gettaxi_Activity"
+            android:theme="@style/ToolbarTheme"
+            android:label="Get Taxi"/>
+
+        <activity android:name=".Bottom_Navigation.Bottom_Calculator_Activity"
+            android:theme="@style/ToolbarTheme"
+            android:label="Calculator"/>
+
+        <activity android:name=".Bottom_Navigation.Bottom_Info_Activity"
+            android:theme="@style/ToolbarTheme"
+            android:label="Information">
+
+        </activity>
     </application>
 
 </manifest>

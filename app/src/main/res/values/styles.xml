@@ -19,11 +19,13 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/taxi_auto_city_122356_1080x1920</item>
     </style>
-    
-    <style name="PopupTheme" parent="Theme.AppCompat.Light">
-        <item name="android:background">@color/colorBackg</item>
+
+    <!-- Toolbar theme. -->
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-
 
 </resources>

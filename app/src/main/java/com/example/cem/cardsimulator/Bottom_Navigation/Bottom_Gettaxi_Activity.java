@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -14,17 +15,38 @@ import com.example.cem.cardsimulator.R;
 public class Bottom_Gettaxi_Activity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom__gettaxi_);
 
+        toolbar= (Toolbar)findViewById(R.id.toolbar_gettaxi);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
         //Bottom navigation
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_surucuara);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        int id = item.getItemId();
+
+        switch (id){
+            case android.R.id.home:
+                Intent info = new Intent(Bottom_Gettaxi_Activity.this, MapsActivity.class);
+                startActivity(info);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

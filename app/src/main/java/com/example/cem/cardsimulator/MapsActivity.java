@@ -75,8 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Initialize buttons
         final Button btn_MapType=(Button) findViewById(R.id.btn_Sat);
-        Button btnGo=(Button) findViewById(R.id.btn_Go);
-        Button btn_relog = (Button)findViewById(R.id.btn_relog);
 
         //Button events
         btn_MapType.setOnClickListener(new View.OnClickListener() {
@@ -86,19 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToLocation();
-            }
-        });
-
-        btn_relog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                relogEvent();
-            }
-        });
     }
 
     @Override
@@ -171,31 +156,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return false;
         }
     };
-
-    private void relogEvent(){
-
-        Intent i = new Intent(MapsActivity.this, MainActivity.class);
-        startActivity(i);
-    }
-
-    private void goToLocation(){
-
-        EditText etLocation=(EditText)findViewById(R.id.et_location);
-        String location=etLocation.getText().toString();
-        if(location!=null && !location.equals("")){
-            List<Address> adressList=null;
-            Geocoder geocoder=new Geocoder(MapsActivity.this);
-            try {
-                adressList=geocoder.getFromLocationName(location,1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address=adressList.get(0);
-            LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(latLng).title("Burası "+location));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
-    }
 
     private void changeMapType(){
 

@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.cem.cardsimulator.MainActivity;
 import com.example.cem.cardsimulator.MapsActivity;
 import com.example.cem.cardsimulator.R;
 
@@ -16,6 +19,7 @@ public class Bottom_Account_Activity extends AppCompatActivity {
 
     private TextView mTextMessage;
     Toolbar toolbar;
+    Button btn_Relog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +30,23 @@ public class Bottom_Account_Activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Layout elements
+        btn_Relog = (Button)findViewById(R.id.btn_Relog);
+
         //Bottom navigation
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_account);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+        btn_Relog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Bottom_Account_Activity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

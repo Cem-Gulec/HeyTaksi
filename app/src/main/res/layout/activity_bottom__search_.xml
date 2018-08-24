@@ -6,22 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".Bottom_Navigation.Bottom_Account_Activity">
 
-    <android.support.v7.widget.Toolbar
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:id="@+id/toolbar_search"
-        android:background="@color/colorPrimaryDark"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        ></android.support.v7.widget.Toolbar>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:id="@+id/lineer"
+        android:layout_alignParentLeft="true">
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_Back"
+            android:background="@drawable/ic_arrow_back_black_24dp" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/et_location" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btn_Clear"
+            android:background="@drawable/ic_search_black_24dp" />
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lineer"
+        android:layout_above="@+id/btn_Go"
+        tools:context=".MapsActivity" />
+
+    <Button
+        android:id="@+id/btn_Go"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TAMAM"
         android:background="@color/grimsi5"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        app:menu="@menu/navigation" />
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

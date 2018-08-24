@@ -54,7 +54,7 @@
 
         <activity android:name=".Bottom_Navigation.Bottom_Search_Activity"
             android:theme="@style/ToolbarTheme"
-            android:label="Search"/>
+            android:label=""/>
 
         <activity android:name=".Bottom_Navigation.Bottom_Gettaxi_Activity"
             android:theme="@style/ToolbarTheme"

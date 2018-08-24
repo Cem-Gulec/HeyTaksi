@@ -7,40 +7,13 @@
 
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lineer"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/et_location" />
-
-        <Button
-            android:text="Go"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_Go"
-            />
-
-        <Button
-            android:text="Re-Login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_relog"
-            />
-    </LinearLayout>
 
     <Button
         android:background="@drawable/plus_image"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="70dp"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
         android:id="@+id/btn_Sat" />
@@ -50,8 +23,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MapsActivity"
-        android:layout_below="@+id/lineer"/>
+        tools:context=".MapsActivity" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

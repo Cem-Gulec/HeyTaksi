@@ -72,8 +72,6 @@ public class Bottom_Calculator_Activity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_surucuara:
-                    Intent surucu = new Intent(Bottom_Calculator_Activity.this, Bottom_Gettaxi_Activity.class);
-                    startActivity(surucu);
                     return true;
 
                 case R.id.navigation_calculator:

@@ -56,10 +56,6 @@
             android:theme="@style/ToolbarTheme"
             android:label=""/>
 
-        <activity android:name=".Bottom_Navigation.Bottom_Gettaxi_Activity"
-            android:theme="@style/ToolbarTheme"
-            android:label="Get Taxi"/>
-
         <activity android:name=".Bottom_Navigation.Bottom_Calculator_Activity"
             android:theme="@style/ToolbarTheme"
             android:label="Calculator"/>

@@ -3,11 +3,9 @@ package com.example.cem.cardsimulator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import com.google.android.gms.location.LocationListener;
-import android.os.Build;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -21,13 +19,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cem.cardsimulator.Bottom_Navigation.Bottom_Account_Activity;
 import com.example.cem.cardsimulator.Bottom_Navigation.Bottom_Calculator_Activity;
-import com.example.cem.cardsimulator.Bottom_Navigation.Bottom_Gettaxi_Activity;
 import com.example.cem.cardsimulator.Bottom_Navigation.Bottom_Info_Activity;
 import com.example.cem.cardsimulator.Bottom_Navigation.Bottom_Search_Activity;
 import com.firebase.geofire.GeoFire;
@@ -38,7 +34,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,8 +47,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
-import java.util.List;
 import android.Manifest;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -63,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
     private GoogleMap mMap;
-    private final static int REQUEST_lOCATION=90;
 
     private TextView mTextMessage;
 
@@ -192,8 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return true;
 
                 case R.id.navigation_surucuara:
-                    Intent surucu = new Intent(MapsActivity.this, Bottom_Gettaxi_Activity.class);
-                    startActivity(surucu);
+
                     return true;
 
                 case R.id.navigation_calculator:

@@ -343,9 +343,6 @@ public class MainActivity extends AppCompatActivity {
 
                     dialog.dismiss();
 
-                    //setting sign in button disabled while prossesing
-                    btnSignin.setEnabled(false);
-
                     //check validation
                     if (TextUtils.isEmpty(edtEmailSign.getText().toString())) {
 
@@ -393,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                             waitingDialog.dismiss();
                             Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
 
-                            btnSignin.setEnabled(true);
+
                         }
                     });
                 }
@@ -406,8 +403,6 @@ public class MainActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-
-
 
 
             dialog.show();

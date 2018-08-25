@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-
+    android:layout_height="match_parent"
+    tools:context=".MapsActivity">
 
 
     <Button
         android:background="@drawable/plus_image"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:id="@+id/btn_Sat" />
 
     <fragment
@@ -24,6 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
+
+        <com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch
+            android:id="@+id/location_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/navigation"
+            app:icon_release="@drawable/ic_locationoff"
+            app:icon_press="@drawable/ic_locationon"
+            />
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

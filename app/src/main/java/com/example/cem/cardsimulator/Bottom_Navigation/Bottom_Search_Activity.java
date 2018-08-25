@@ -163,6 +163,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     //btn_Go Event
     private void goToLocation(){
 
+        mMap.clear();
+
+
         EditText etLocation=(EditText)findViewById(R.id.et_location);
         String location=etLocation.getText().toString();
         if(location!=null && !location.equals("")){
@@ -175,8 +178,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             }
             Address address=adressList.get(0);
             LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(latLng).title("Burası "+location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.addMarker(new MarkerOptions()
+            .position(new LatLng(address.getLatitude(),address.getLongitude())));
         }
     }
 

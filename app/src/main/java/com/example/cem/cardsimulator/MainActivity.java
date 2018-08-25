@@ -1,5 +1,6 @@
 package com.example.cem.cardsimulator;
 
+import android.support.v7.app.AlertDialog;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -50,6 +51,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -238,9 +241,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     private void forgetEvent(){
 
         {
@@ -343,6 +343,9 @@ public class MainActivity extends AppCompatActivity {
 
                     dialog.dismiss();
 
+                    //setting sign in button disabled while prossesing
+                    btnSignin.setEnabled(false);
+
                     //check validation
                     if (TextUtils.isEmpty(edtEmailSign.getText().toString())) {
 
@@ -363,19 +366,22 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
+                    final android.app.AlertDialog waitingDialog = new SpotsDialog(MainActivity.this);
+                    waitingDialog.show();
+
                     //Login
                     auth.signInWithEmailAndPassword(edtEmailSign.getText().toString(),edtPasswordSign.getText().toString())
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
 
+                                    waitingDialog.dismiss();
                                     if(checkboxClickCheck){
 
                                         editorSign.putString(EMAIL_KEYSIGN, edtEmailSign.getText().toString());
                                         editorSign.putString(PASSWORD_KEYSIGN, edtPasswordSign.getText().toString());
                                         editorSign.commit();
                                     }
-                                    progressDevent();
 
                                     startActivity(new Intent(MainActivity.this,MapsActivity.class));
                                     finish();
@@ -383,7 +389,11 @@ public class MainActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+
+                            waitingDialog.dismiss();
                             Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+
+                            btnSignin.setEnabled(true);
                         }
                     });
                 }
@@ -430,50 +440,6 @@ public class MainActivity extends AppCompatActivity {
 
         else
             checkboxClickCheck=true;
-    }
-
-    private void progressDevent(){
-
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Loading..");
-        progressDialog.setTitle("Please Wait");
-        progressDialog.setCancelable(true);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-
-        /*AsyncTask<Void,Void,Void> asyn = new AsyncTask<Void, Void, Void>() {
-            private ProgressDialog dialog= new ProgressDialog(MainActivity.this);
-            @Override
-            protected void onPreExecute() {
-                dialog.setMessage("Loading..");
-                dialog.setTitle("Please Wait");
-                dialog.setCancelable(true);
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.show();
-            }
-            protected Void doInBackground(Void... args) {
-                try{
-                    Thread.sleep(3000);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                return null;
-            }
-            protected void onPostExecute(Void result) {
-                // do UI work here
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                }
-            }
-        }.execute();*/
-
-
-
-
-
-
-
-
     }
 
     private void showRegisterDialog(){

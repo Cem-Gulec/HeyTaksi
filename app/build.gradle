@@ -39,6 +39,7 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-auth:15.0.1'
     compile 'com.google.android.gms:play-services-location:15.0.1'
+    compile 'com.google.android.gms:play-services-places:15.0.1'
 
     compile 'com.github.d-max:spots-dialog:0.7@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'

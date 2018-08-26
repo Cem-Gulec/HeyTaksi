@@ -17,20 +17,30 @@
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
             android:id="@+id/btn_Back"
             android:background="@drawable/ic_arrow_back_black_24dp" />
 
+        <!--
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/et_location" />
+            android:id="@+id/et_location" /> -->
 
-        <Button
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"></fragment>
+
+       <!-- <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/btn_Clear"
-            android:background="@drawable/ic_search_black_24dp" />
+            android:background="@drawable/ic_search_black_24dp" />-->
     </LinearLayout>
 
     <fragment

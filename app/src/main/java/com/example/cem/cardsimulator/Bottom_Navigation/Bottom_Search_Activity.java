@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,9 +41,14 @@ import com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -106,7 +112,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     SupportMapFragment mapFragment;
 
     Button btn_Clear,btn_Back,btn_Go;
-    TextView tv_location;
+    //TextView tv_location;
+    private PlaceAutocompleteFragment places;
+
 
     MaterialAnimatedSwitch location_switch;
 
@@ -178,12 +186,12 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         //Layout elements
-        btn_Clear = (Button)findViewById(R.id.btn_Clear);
-        tv_location = (TextView)findViewById(R.id.et_location);
+       // btn_Clear = (Button)findViewById(R.id.btn_Clear);
+        //tv_location = (TextView) findViewById(R.id.et_location);
         btn_Back = (Button)findViewById(R.id.btn_Back);
         btn_Go = (Button)findViewById(R.id.btn_Go);
 
-        tv_location.addTextChangedListener(new TextWatcher() {
+       /*tv_location.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -203,14 +211,14 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                     btn_Clear.setBackgroundResource(R.drawable.ic_search_black_24dp);
                 }
             }
-        });
+        });*/
 
-        btn_Clear.setOnClickListener(new View.OnClickListener() {
+       /* btn_Clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_location.setText("");
+                //tv_location.setText("");
             }
-        });
+        });*/
 
         btn_Back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,12 +229,15 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             }
         });
 
-        btn_Go.setOnClickListener(new View.OnClickListener() {
+        /*btn_Go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLocation();
+
+                destination = tv_location.getText().toString();
+                destination = destination.replace(" ","+");
+                getDirection();
             }
-        });
+        });*/
 
         location_switch = (MaterialAnimatedSwitch)findViewById(R.id.location_switch);
 
@@ -258,6 +269,30 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         setUpLocation();
 
         mService = Common.getGoogleAPI();
+
+        //Places API
+        places = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        places.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+                destination = place.getAddress().toString();
+                destination = destination.replace(" ","+");
+
+                mMap.clear();
+                mCurrent = mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_location_pin))
+                        .position(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude))
+                        .title("You"));
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude),15));
+            }
+
+            @Override
+            public void onError(Status status) {
+                Toast.makeText(Bottom_Search_Activity.this,""+status.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -267,7 +302,8 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         mMap.setTrafficEnabled(false);
         mMap.setIndoorEnabled(false);
         mMap.setBuildingsEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+
 
     }
 
@@ -466,10 +502,11 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             isSearched=true;
         }*/
 
-       destination = tv_location.getText().toString();
-       destination = destination.replace(" ","+");
+    }
 
-       //get direction
+    private void getDirection(){
+
+        //get direction
         currentPos = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
         String requestApi = null;
@@ -527,8 +564,8 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                                 blackPolyline = mMap.addPolyline(blackPolyLineOptions);
 
                                 mMap.addMarker(new MarkerOptions()
-                                .position(polyLineList.get(polyLineList.size()-1))
-                                .title("Pickup Location"));
+                                        .position(polyLineList.get(polyLineList.size()-1))
+                                        .title("Pickup Location"));
 
                                 //Animation starts here
                                 ValueAnimator polyLineAnimator = ValueAnimator.ofInt(0,100);
@@ -549,9 +586,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                                 polyLineAnimator.start();
 
                                 carMarker = mMap.addMarker(new MarkerOptions()
-                                .position(currentPos)
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                                        .position(currentPos)
+                                        .flat(true)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
 
                                 handler = new Handler();
                                 index =-1;
@@ -573,7 +610,6 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private float getBearing(LatLng startPos, LatLng endPos){

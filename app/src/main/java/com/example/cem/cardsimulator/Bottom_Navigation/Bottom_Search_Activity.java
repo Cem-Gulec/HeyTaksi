@@ -31,6 +31,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.example.cem.cardsimulator.Common.Common;
 import com.example.cem.cardsimulator.MapsActivity;
 import com.example.cem.cardsimulator.Path.iGoogleAPI;
@@ -84,7 +89,8 @@ import retrofit2.Response;
 public class Bottom_Search_Activity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
+        LocationListener,
+        RoutingListener
 {
 
     private GoogleMap mMap;
@@ -96,6 +102,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private LatLng Last_Location,Selected_Location;
+    private int is_SecondTimeSelect=0;
+    private Marker preSelected;
 
     private static int UPDATE_INTERVAL = 5000;
     private static int FASTEST_INTERVAL = 3000;
@@ -132,7 +141,12 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
 
     private iGoogleAPI mService;
 
-    Runnable drawPathRunnable = new Runnable() {
+    private List<Polyline> polylines;
+    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
+
+
+
+    /*Runnable drawPathRunnable = new Runnable() {
         @Override
         public void run() {
             if(index<polyLineList.size()-1)
@@ -163,16 +177,16 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                     carMarker.setRotation(getBearing(startPos,newPos));
                     mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()
-                            .target(newPos)
-                            .zoom(15.5f)
-                            .build()
+                                    .target(newPos)
+                                    .zoom(15.5f)
+                                    .build()
                     ));
                 }
             });
             valueAnimator.start();
             handler.postDelayed(this,3000);
         }
-    };
+    };*/
 
 
     @Override
@@ -180,13 +194,15 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom__search_);
 
+        polylines = new ArrayList<>();
+
         //Defining map elements
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         //Layout elements
-       // btn_Clear = (Button)findViewById(R.id.btn_Clear);
+        // btn_Clear = (Button)findViewById(R.id.btn_Clear);
         //tv_location = (TextView) findViewById(R.id.et_location);
         btn_Back = (Button)findViewById(R.id.btn_Back);
         btn_Go = (Button)findViewById(R.id.btn_Go);
@@ -229,15 +245,13 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             }
         });
 
-        /*btn_Go.setOnClickListener(new View.OnClickListener() {
+        btn_Go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                destination = tv_location.getText().toString();
-                destination = destination.replace(" ","+");
-                getDirection();
+                getRouteToMarker(Selected_Location);
             }
-        });*/
+        });
 
         location_switch = (MaterialAnimatedSwitch)findViewById(R.id.location_switch);
 
@@ -253,7 +267,6 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                     stopLocationUpdates();
                     mCurrent.remove();
                     mMap.clear();
-                    handler.removeCallbacks(drawPathRunnable);
                     Snackbar.make(mapFragment.getView(),"Offline",Snackbar.LENGTH_SHORT).show();
                 }
             }
@@ -276,16 +289,26 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             @Override
             public void onPlaceSelected(Place place) {
 
+                if(is_SecondTimeSelect>0)
+                    preSelected.remove();
+
+                is_SecondTimeSelect++;
+                clearPoly();
+
+                Selected_Location = new LatLng(place.getLatLng().latitude,place.getLatLng().longitude);
+
                 destination = place.getAddress().toString();
                 destination = destination.replace(" ","+");
 
-                mMap.clear();
-                mCurrent = mMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_location_pin))
+                preSelected =mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_icon))
                         .position(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude))
                         .title("You"));
 
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude),15));
+
+
+
             }
 
             @Override
@@ -293,6 +316,17 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                 Toast.makeText(Bottom_Search_Activity.this,""+status.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getRouteToMarker(LatLng selected_location) {
+
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(this)
+                .alternativeRoutes(false)
+                .waypoints(Last_Location, selected_location)
+                .build();
+        routing.execute();
     }
 
     @Override
@@ -374,6 +408,8 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             final double latitude = mLastLocation.getLatitude();
             final double longitude = mLastLocation.getLongitude();
 
+            Last_Location = new LatLng(latitude,longitude);
+
             lattitude_current = latitude;
             longitude_current = longitude;
 
@@ -393,6 +429,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
 
                     //Move camera to current location
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude),15));
+
                 }
             });
             //}
@@ -504,7 +541,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
 
     }
 
-    private void getDirection(){
+   /* private void getDirection(){
 
         //get direction
         currentPos = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -610,9 +647,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private float getBearing(LatLng startPos, LatLng endPos){
+    /*private float getBearing(LatLng startPos, LatLng endPos){
 
         double lat = Math.abs(startPos.latitude - endPos.latitude);
         double lng = Math.abs(startPos.longitude - endPos.longitude);
@@ -630,9 +667,9 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             return (float) (90-Math.toDegrees(Math.atan(lng/lat))+270);
 
         return -1;
-    }
+    }*/
 
-    private List decodePoly(String encoded) {
+   /* private List decodePoly(String encoded) {
 
         List poly = new ArrayList();
         int index = 0, len = encoded.length();
@@ -664,7 +701,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         }
 
         return poly;
-    }
+    }*/
 
     private void backPressedEvent(){
 
@@ -693,5 +730,62 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         displayLocation();
+    }
+
+    @Override
+    public void onRoutingFailure(RouteException e) {
+
+        if(e != null) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int i) {
+
+        if(polylines.size()>0) {
+            for (Polyline poly : polylines) {
+                poly.remove();
+            }
+        }
+
+        polylines = new ArrayList<>();
+        //add route(s) to the map.
+        for (i = 0; i <route.size(); i++) {
+
+            //In case of more than 5 alternative routes
+            int colorIndex = i % COLORS.length;
+
+            PolylineOptions polyOptions = new PolylineOptions();
+            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.width(10 + i * 3);
+            polyOptions.addAll(route.get(i).getPoints());
+            Polyline polyline = mMap.addPolyline(polyOptions);
+            polylines.add(polyline);
+
+            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+
+    }
+
+    private void clearPoly(){
+
+        for(Polyline line : polylines)
+        {
+            line.remove();
+        }
+
+        polylines.clear();
     }
 }

@@ -36,11 +36,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"></fragment>
 
-       <!-- <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/btn_Clear"
-            android:background="@drawable/ic_search_black_24dp" />-->
+        <!-- <Button
+             android:layout_width="30dp"
+             android:layout_height="30dp"
+             android:id="@+id/btn_Clear"
+             android:background="@drawable/ic_search_black_24dp" />-->
     </LinearLayout>
 
     <fragment

@@ -2,6 +2,7 @@ package com.example.cem.cardsimulator.Bottom_Navigation;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,12 +17,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -37,6 +41,7 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.cem.cardsimulator.Common.Common;
+import com.example.cem.cardsimulator.MainActivity;
 import com.example.cem.cardsimulator.MapsActivity;
 import com.example.cem.cardsimulator.Path.iGoogleAPI;
 import com.example.cem.cardsimulator.R;
@@ -69,18 +74,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,6 +109,10 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     //Play services
     private static final int MY_PERMISSION_REQUEST_CODE = 7000;
     private static final int PLAY_SERVICE_RES_REQUEST = 7001;
+
+    private static int basePrice = 4;
+    private static double perkm = 2.5;
+    private static int minPrice = 10;
 
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
@@ -120,7 +135,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     Marker mCurrent;
     SupportMapFragment mapFragment;
 
-    Button btn_Clear,btn_Back,btn_Go;
+    Button btn_Clear,btn_Back,btn_Go,btn_Info;
     //TextView tv_location;
     private PlaceAutocompleteFragment places;
 
@@ -142,8 +157,12 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     private iGoogleAPI mService;
 
     private List<Polyline> polylines;
-    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
 
+
+    String address_sel;
+    float distance;
+    float duration;
+    float price_Info;
 
 
     /*Runnable drawPathRunnable = new Runnable() {
@@ -206,6 +225,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         //tv_location = (TextView) findViewById(R.id.et_location);
         btn_Back = (Button)findViewById(R.id.btn_Back);
         btn_Go = (Button)findViewById(R.id.btn_Go);
+        btn_Info = (Button)findViewById(R.id.btn_Info);
 
        /*tv_location.addTextChangedListener(new TextWatcher() {
             @Override
@@ -250,6 +270,17 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             public void onClick(View v) {
 
                 getRouteToMarker(Selected_Location);
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Selected_Location.latitude,Selected_Location.longitude),11));
+
+
+            }
+        });
+
+        btn_Info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                infoDialogEvent();
             }
         });
 
@@ -306,8 +337,6 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
                         .title("You"));
 
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude),15));
-
-
 
             }
 
@@ -760,17 +789,23 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         //add route(s) to the map.
         for (i = 0; i <route.size(); i++) {
 
-            //In case of more than 5 alternative routes
-            int colorIndex = i % COLORS.length;
-
             PolylineOptions polyOptions = new PolylineOptions();
-            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+            polyOptions.color(getResources().getColor(R.color.primary_dark_material_light));
             polyOptions.width(10 + i * 3);
             polyOptions.addAll(route.get(i).getPoints());
             Polyline polyline = mMap.addPolyline(polyOptions);
             polylines.add(polyline);
 
-            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
+            address_sel = route.get(i).getEndAddressText();
+
+            float dist = (float) route.get(i).getDistanceValue() / 1000;
+            price_Info = (float) getPrice(dist);
+
+            distance =  dist;
+
+            duration = (float) route.get(i).getDurationValue() / 60;
+
+
         }
     }
 
@@ -787,5 +822,51 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         }
 
         polylines.clear();
+    }
+
+    public static double getPrice(double km){
+
+        if((basePrice + km*perkm)< minPrice)
+            return minPrice;
+        else
+            return basePrice + km*perkm;
+    }
+
+    private void infoDialogEvent(){
+
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View info_layout = inflater.inflate(R.layout.bottom_info_sheet,null);
+
+            final TextView tv_destination = info_layout.findViewById(R.id.txtDestination);
+            final TextView tv_distance = info_layout.findViewById(R.id.txtDistance);
+            final TextView tv_duration = info_layout.findViewById(R.id.txtDuration);
+            final TextView tv_calculator = info_layout.findViewById(R.id.txtCalculator);
+
+            tv_destination.setText(address_sel);
+            tv_distance.setText(String.valueOf(distance)+" km");
+
+            tv_duration.setText(String.valueOf(duration)+ " min");
+
+            tv_calculator.setText(String.valueOf(price_Info)+" TL");
+
+            dialog.setView(info_layout);
+
+            //set button
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+
+
+        }
     }
 }

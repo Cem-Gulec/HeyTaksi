@@ -52,6 +52,14 @@
         android:layout_above="@+id/btn_Go"
         tools:context=".MapsActivity" />
 
+    <Button
+        android:id="@+id/btn_Info"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/ic_info_outline_black_24dp"
+        android:layout_below="@+id/lineer"/>
+
     <com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch
         android:id="@+id/location_switch"
         android:layout_width="wrap_content"

@@ -48,23 +48,23 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Bottom_Navigation.Bottom_Account_Activity"
-            android:theme="@style/ToolbarTheme"
-            android:label="Account"/>
-
-        <activity android:name=".Bottom_Navigation.Bottom_Search_Activity"
-            android:theme="@style/ToolbarTheme"
-            android:label=""/>
-
-        <activity android:name=".Bottom_Navigation.Bottom_Calculator_Activity"
-            android:theme="@style/ToolbarTheme"
-            android:label="Calculator"/>
-
-        <activity android:name=".Bottom_Navigation.Bottom_Info_Activity"
-            android:theme="@style/ToolbarTheme"
-            android:label="Information">
-
-        </activity>
+        <activity
+            android:name=".Bottom_Navigation.Bottom_Account_Activity"
+            android:label="Account"
+            android:theme="@style/ToolbarTheme" />
+        <activity
+            android:name=".Bottom_Navigation.Bottom_Search_Activity"
+            android:label=""
+            android:theme="@style/ToolbarTheme" />
+        <activity
+            android:name=".Bottom_Navigation.Bottom_Calculator_Activity"
+            android:label="Calculator"
+            android:theme="@style/ToolbarTheme" />
+        <activity
+            android:name=".Bottom_Navigation.Bottom_Info_Activity"
+            android:label="Information"
+            android:theme="@style/ToolbarTheme"></activity>
+        <activity android:name=".final_payment"></activity>
     </application>
 
 </manifest>

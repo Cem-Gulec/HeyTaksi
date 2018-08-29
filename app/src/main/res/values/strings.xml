@@ -7,6 +7,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="gps_network_not_enabled">GPS not enabled</string>
     <string name="open_location_settings">Open location settings</string>
-    
+
     <string name="google_direction_api">AIzaSyDGA6nQqzgVEUpp2jwogHXSm_eQI4oWOR4</string>
 </resources>

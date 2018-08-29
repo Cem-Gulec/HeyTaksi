@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFF">
+
+    <LinearLayout
+        android:id="@+id/Big_Linear1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Ödeme Onayı"
+            android:textSize="20sp"
+            android:gravity="center"/>
+
+
+        <LinearLayout
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Tutar"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:textColor="@color/grimsi5"/>
+
+            <TextView
+                android:id="@+id/txt_tutar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@drawable/border"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Bahşiş"
+                android:textSize="15sp"
+                android:textColor="@color/grimsi5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn1"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:text="Yok"
+                    android:textSize="12sp"
+                    android:background="@drawable/border"/>
+
+                <Button
+                    android:id="@+id/btn2"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:text="%10"
+                    android:textSize="12sp"
+                    android:background="@drawable/border"/>
+
+                <Button
+                    android:id="@+id/btn3"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:text="%15"
+                    android:textSize="12sp"
+                    android:background="@drawable/border"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/border">
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:id="@+id/txt_promosyon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Promosyon Kodu"
+                android:textSize="15sp"
+                android:textColor="@color/grimsi5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_Ekle"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:text="EKLE"
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/border">
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Toplam Tutar"
+                android:textSize="15sp"
+                android:textColor="@color/grimsi5"/>
+
+            <TextView
+                android:id="@+id/txt_ToplamTutar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="20dp"
+                android:textSize="25sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="160dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/Big_Linear1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ödeme Yapacağın Kartı Seç"/>
+
+        <LinearLayout
+            android:background="#E0E0E0"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_credit_card_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:text="KİŞİSEL"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:text="5313 **** **** 2027"
+                    android:textSize="12sp"
+                    android:textColor="@color/cardview_shadow_start_color"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_iptal"
+                android:layout_marginRight="5dp"
+                android:background="#FFFF0000"
+                android:text="IPTAL"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_onay"
+                android:layout_marginLeft="5dp"
+                android:background="#FFFCFF00"
+                android:text="ONAY"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

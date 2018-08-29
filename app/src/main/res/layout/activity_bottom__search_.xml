@@ -78,4 +78,14 @@
         android:background="@color/grimsi5"
         android:layout_alignParentBottom="true"/>
 
+    <Button
+        android:enabled="false"
+        android:visibility="invisible"
+        android:id="@+id/btn_StartJourney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yolculuk Başlat"
+        android:background="@color/grimsi5"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

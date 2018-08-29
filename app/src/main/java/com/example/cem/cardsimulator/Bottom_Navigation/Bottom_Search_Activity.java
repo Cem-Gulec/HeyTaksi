@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -45,6 +46,7 @@ import com.example.cem.cardsimulator.MainActivity;
 import com.example.cem.cardsimulator.MapsActivity;
 import com.example.cem.cardsimulator.Path.iGoogleAPI;
 import com.example.cem.cardsimulator.R;
+import com.example.cem.cardsimulator.final_payment;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.github.glomadrian.materialanimatedswitch.MaterialAnimatedSwitch;
@@ -92,6 +94,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -103,6 +107,12 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         LocationListener,
         RoutingListener
 {
+
+    //sharedPreferences
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    private String TUTAR_KEY="com.example.burak.erisim.TUTAR";
+    private String MAIN_KEY="com.example.burak.erisim.MAIN_DATA";
 
     private GoogleMap mMap;
 
@@ -135,7 +145,8 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     Marker mCurrent;
     SupportMapFragment mapFragment;
 
-    Button btn_Clear,btn_Back,btn_Go,btn_Info;
+    Button btn_Clear,btn_Back,btn_Go,btn_Info,btn_StartJourney;
+    TextView tv_RequestTaxi;
     //TextView tv_location;
     private PlaceAutocompleteFragment places;
 
@@ -163,6 +174,7 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
     float distance;
     float duration;
     float price_Info;
+    Timer timer;
 
 
     /*Runnable drawPathRunnable = new Runnable() {
@@ -226,6 +238,11 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         btn_Back = (Button)findViewById(R.id.btn_Back);
         btn_Go = (Button)findViewById(R.id.btn_Go);
         btn_Info = (Button)findViewById(R.id.btn_Info);
+        btn_StartJourney = (Button)findViewById(R.id.btn_StartJourney);
+
+        //sharedpreferences
+        sharedPreferences=getSharedPreferences(MAIN_KEY, MODE_PRIVATE);
+        editor=sharedPreferences.edit();
 
        /*tv_location.addTextChangedListener(new TextWatcher() {
             @Override
@@ -284,6 +301,27 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             }
         });
 
+        btn_StartJourney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                editor.putFloat(TUTAR_KEY, price_Info);
+                editor.commit();
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestForTaxi();
+                    }
+                }, 2000);
+
+
+                btn_StartJourney.setEnabled(false);
+
+            }
+        });
+
         location_switch = (MaterialAnimatedSwitch)findViewById(R.id.location_switch);
 
         location_switch.setOnCheckedChangeListener(new MaterialAnimatedSwitch.OnCheckedChangeListener() {
@@ -319,6 +357,12 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
         places.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+
+                btn_Go.setEnabled(true);
+                btn_Go.setVisibility(View.VISIBLE);
+
+                btn_StartJourney.setEnabled(false);
+                btn_StartJourney.setVisibility(View.INVISIBLE);
 
                 if(is_SecondTimeSelect>0)
                     preSelected.remove();
@@ -805,8 +849,13 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
 
             duration = (float) route.get(i).getDurationValue() / 60;
 
-
         }
+
+        btn_Go.setEnabled(false);
+        btn_Go.setVisibility(View.INVISIBLE);
+
+        btn_StartJourney.setEnabled(true);
+        btn_StartJourney.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -864,9 +913,51 @@ public class Bottom_Search_Activity extends FragmentActivity implements OnMapRea
             });
 
             dialog.show();
-
-
-
-        }
+            }
     }
+
+    private void requestForTaxi() {
+
+            mMap.clear();
+            mCurrent = mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_location_pin))
+                    .position(new LatLng(Selected_Location.latitude,Selected_Location.longitude))
+                    .title("You"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Selected_Location.latitude,Selected_Location.longitude),11));
+
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(Bottom_Search_Activity.this);
+            dialog.setCancelable(true);
+
+            LayoutInflater inflater = LayoutInflater.from(Bottom_Search_Activity.this);
+            View request_taxi = inflater.inflate(R.layout.request_taxi,null);
+
+             tv_RequestTaxi = (TextView)request_taxi.findViewById(R.id.txt_requestTaxi);
+             tv_RequestTaxi.setText("Istenilen lokasyona ulaşıldı." +
+                "\nÖdenecek Tutar : "+price_Info+ "TL");
+
+
+        dialog.setView(request_taxi);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(Bottom_Search_Activity.this,final_payment.class));
+                    }
+                }, 1000);
+
+            }
+        });
+
+            dialog.show();
+
+            clearPoly();
+    }
+
+
 }

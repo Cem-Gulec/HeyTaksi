@@ -1,4 +1,6 @@
-package com.example.cem.cardsimulator;
+/*
+TODO: maps için gerekli izinler tekrar alınması gerekiyor
+*/package com.example.cem.cardsimulator;
 
 import android.support.v7.app.AlertDialog;
 import android.app.ActionBar;

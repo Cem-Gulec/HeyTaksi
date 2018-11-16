@@ -1,6 +1,49 @@
 /*
-TODO: maps için gerekli izinler tekrar alınması gerekiyor
-*/package com.example.cem.cardsimulator;
+TODO: konum açma dialoğu tasarım
+TODO: dialog positive & negative button tasarım
+TODO: deviceta çıkacak logo değiştir
+TODO: botton navigation tasarım
+TODO: default bottom navigation color
+TODO: Mainactivity butonlar için güzel bir tasarım
+TODO: Sayfalar arası geçiş animasyonu beklet ve güzelleştir
+TODO: başlat(GetTaxi) butonu diğerlerinden daha farklı ve öne çıkar olsun (button navigation elementlerini teker teker düzenlemeyi öğren
+TODO: dialoglardan her girmediği alan için uyarı
+TODO: phone number 5 dışında bir şey ile başlayamasın
+TODO: kullanıcı şifresini maskeleyip depola firebasede -- hashlemek, kriptolamak, şifrelemek
+TODO: bitaksideki gibi sol üstte yer alan --- yapılabilir
+TODO: Account kısmına koyacağım "How to use" gibi bir şeyde -> https://www.youtube.com/watch?v=RUkbmVvxu5U
+TODO: Toolbar title gravity center https://stackoverflow.com/questions/12387345/how-to-center-align-the-actionbar-title-in-android
+TODO: en başta konum sorarken default metin gibi yaz ve konum şekli falan koy ( bitaksinin aynısı)
+TODO: bottom navigation with center floating button-> https://github.com/ittianyu/BottomNavigationViewEx + https://www.youtube.com/watch?v=ALbjkVDkB7I&list=PLc2rvfiptPSRCMzAoxGQ2dF4G6zqDvo_v&index=34
+TODO: MainActivitydeki dialoglar açılırken animasyon ile gelsin - https://www.youtube.com/watch?v=-7xLyPLJ_NI
+TODO: Splash screen güzelleştirmek için birşeyler yapılabilir (en başta gelen ekran) - https://www.youtube.com/watch?v=ZZkanr8tS6w
+TODO: Map_type için floating button yap -> diğer yapılabilecek map_typeları da içine göm
+TODO: searchintentte konum değiştiğinde camera animasyonlu mu gitsin? bitaksiden bak
+TODO: calculator için searchdeki map olaylarını taşı
+
+TODO: bir kere login olduysa Main Acitivity atlayıp direkt map çalışsın
+TODO: Search intent dizayn ( arama çubuğu altında hazır keyler olacak)
+TODO: Bottom navigationdakilere tıklandığında çıkacak intentlerin tasarımı
+TODO: Rastgele taksi konumları oluşturma(random generator ile)
+TODO: Yol para ücreti hesap(intent olarak) -> if(açılış ücret+ kmbaşı*km) < min return min    else return yol ücret
+TODO: Account intent içinde; Home,Recents,Settings,Write to us, About us olacak
+TODO: Info kısmına bize yazın olacak -> Benim linklerimi içeren sayfa olacak -- https://github.com/medyo/android-about-page
+TODO: gps izninin direkt otomatik olarak belirlenmesi kodda
+TODO: her aktivite gerçekleştirecek şeye tıklamadan önce location permission kontrol etsin
+TODO: gps kısmına while gibi bir loop koy: en başta intente girdikten sonra eğer konum açılmayıp geri gelindiyse tekrar intente girsin / konum açma otomatik yapana kadar yapılabilecek çözüm   -> gpsalert boolean olsun while içindeki durumuna göre çağrılmaya dev
+TODO: clearden sonra benim konum eklensin // en başta konum imgesini silmemek için -> (çözüldü) isSearched ile if koşulu konularak clearden sonra yapılabilir
+TODO: son ve önemli görevimiz -> Bottom__search intentte yapacağı aramayı onPlaceSelected kısmındaki Place objesinin lat ve longitude özelliklerini tutmamız gerek
+- bilgiyi tuttuktan sonra alttaki tamam butonuna basıldığında MapsActivity'e o konumu lastKonum gibi bir şekilde dönecek
+- lokasyon servislerinden aldığı benim konumum ile DiğerActivityden dönen lokasyon arası çizgi çekilecek
+- Son olarak GetTaxi'ye basılır ise yolculuk animasyonu başlayacak
+- Yolculuk sonunda para bilgisini kaydetmemiz gerekiyor
+TODO: defterde yazdığım son maddeler
+TODO: son durum -> ilk( benim konum ) ile varmak istenilen yer arası route çizilecek / sonrasında aşağıdan yolculuk başlat denilirse yolculuk başlasın detaylar ekrana verilsin -> süre uzaklık fiyat vs.
+TODO: kamera açısı direkt üstümde başlayacak7
+TODO: double değerlerde noktadan sonra 2 değer olması gerekiyor.
+*/
+
+package com.example.cem.cardsimulator;
 
 import android.support.v7.app.AlertDialog;
 import android.app.ActionBar;
